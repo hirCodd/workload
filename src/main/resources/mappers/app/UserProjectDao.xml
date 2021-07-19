@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.workloadaccount.app.mapper.UserProjectDao">
+    <resultMap id="BaseResultMap" type="com.workloadaccount.app.entity.UserProjectDO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="project_id" jdbcType="INTEGER" property="projectId"/>
+        <result column="work_time" jdbcType="INTEGER" property="workTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <parameterMap id="UpdateWorkloadTimeParameterMap" type="com.workloadaccount.app.entity.UserProjectDO">
+        <parameter property="userId" jdbcType="INTEGER" javaType="java.lang.Integer" resultMap="BaseResultMap"/>
+        <parameter property="projectId" jdbcType="INTEGER" javaType="java.lang.Integer" resultMap="BaseResultMap"/>
+        <parameter property="workTime" jdbcType="BIGINT" javaType="java.lang.Long" resultMap="BaseResultMap"/>
+    </parameterMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, project_id, work_time, create_time, update_time
+    </sql>
+
+<!--    UserProjectDO findUserProjectById(Integer id);-->
+    <select id="findUserProjectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_user_project
+        where project_id = #{id, jdbcType=INTEGER}
+    </select>
+<!--    List<UserProjectDO> findUserProjectByUserId(Integer id);-->
+    <select id="findUserProjectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_user_project
+        where user_id = #{id, jdbcType=INTEGER}
+    </select>
+
+<!--    void updateWorkloadTime(Integer projectId, Integer userId);-->
+    <update id="updateWorkloadTime" parameterMap="UpdateWorkloadTimeParameterMap">
+        update tb_user_project
+        set work_time = work_time + #{workTime, jdbcType=BIGINT}
+        where user_id = #{userId, jdbcType=INTEGER} and project_id = #{projectId, jdbcType=INTEGER}
+    </update>
+</mapper>

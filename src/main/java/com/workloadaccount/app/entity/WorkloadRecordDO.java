@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+
 /**
  * @author
  * @description
@@ -15,21 +18,21 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class UserProjectDO extends BaseDO{
-    private static final long serialVersionUID = -3698255028637501701L;
+public class WorkloadRecordDO extends BaseDO {
+    private static final long serialVersionUID = 5914342016508695142L;
 
-    /**
-     * 用户id
-     */
     private Integer userId;
-
-    /**
-     * 项目id
-     */
     private Integer projectId;
 
     /**
-     * 工作时间
+     * 工作概述
      */
-    private Long workTime;
+    private String workloadDate;
+
+    /**
+     * 工作时间(秒)
+     */
+    private BigDecimal workloadTime;
+
+
 }

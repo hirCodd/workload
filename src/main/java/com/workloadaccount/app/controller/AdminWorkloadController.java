@@ -5,9 +5,7 @@ import com.workloadaccount.app.service.impl.AdminWorkloadServiceImpl;
 import com.workloadaccount.system.response.Result;
 import com.workloadaccount.system.response.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.workloadaccount.system.response.ResultEnum.GLOBAL_SUCCESS;
 
@@ -18,10 +16,21 @@ import static com.workloadaccount.system.response.ResultEnum.GLOBAL_SUCCESS;
  * @since
  */
 @RestController
+@RequestMapping("/admin")
 public class AdminWorkloadController {
 
     @Autowired
     AdminWorkloadServiceImpl adminWorkloadService;
 
+    @GetMapping("/count/user")
+    public Result countByUser() {
+        adminWorkloadService.getWorkloadByUser();
+        return ResultUtil.success(GLOBAL_SUCCESS.getCode(), GLOBAL_SUCCESS.getMessage());
+    }
 
+    @GetMapping("/count/project")
+    public Result countByProject() {
+        adminWorkloadService.getWorkloadByProject();
+        return ResultUtil.success(GLOBAL_SUCCESS.getCode(), GLOBAL_SUCCESS.getMessage());
+    }
 }

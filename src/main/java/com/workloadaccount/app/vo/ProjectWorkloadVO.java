@@ -1,5 +1,9 @@
 package com.workloadaccount.app.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 /**
@@ -8,6 +12,9 @@ import java.util.List;
  * @see
  * @since
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProjectWorkloadVO {
     private String projectName;
     private List<ProjectWorkloadUserVO> projectWorkloadUserVoList;

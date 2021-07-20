@@ -1,6 +1,9 @@
 package com.workloadaccount.app.service;
 
 import com.github.pagehelper.PageInfo;
+import com.workloadaccount.app.vo.ProjectVO;
+
+import java.util.List;
 
 /**
  * @author
@@ -9,6 +12,7 @@ import com.github.pagehelper.PageInfo;
  * @since
  */
 public interface ProjectService {
+    List<ProjectVO> listProject();
 
 //    /**
 //     * 分页查询项目

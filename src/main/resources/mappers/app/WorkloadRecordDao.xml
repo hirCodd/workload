@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.workloadaccount.app.mapper.WorkloadRecordDao">
+
+    <parameterMap id="" type="com.workloadaccount.app.entity.WorkloadRecordDO">
+
+    </parameterMap>
+<!--    void insertWorkload(WorkloadLogDO workloadLogDO);-->
+    <insert id="insertWorkload" parameterType="com.workloadaccount.app.entity.WorkloadRecordDO">
+        insert into tb_workload_record(user_id, project_id, workload_date, workload_time, create_time, update_time)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.userId, jdbcType=INTEGER}, #{item.projectId, jdbcType=INTEGER}, #{item.workloadDate, jdbcType=DATE},
+            #{item.workloadTime, jdbcType=DECIMAL}, now(), now())
+        </foreach>
+    </insert>
+</mapper>

@@ -3,8 +3,11 @@ package com.workloadaccount.app.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -16,8 +19,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecordWorkTimeDTO {
-    private List<RecordWorkTimeBaseDTO> data;
-    private BigDecimal workHour;
-    private BigDecimal workDays;
+@ToString
+public class RecordWorkTimeDTO implements Serializable {
+    private static final long serialVersionUID = -923812743340476523L;
+    private String projectId;
+    private String date;
+    private BigDecimal workTime;
+//    private List<RecordWorkTimeBaseDTO> data;
+//    private BigDecimal workHour;
+//    private BigDecimal workDays;
 }

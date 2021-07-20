@@ -3,15 +3,16 @@ package com.workloadaccount.app.service.impl;
 import com.github.pagehelper.PageInfo;
 import com.workloadaccount.app.mapper.ProjectDao;
 import com.workloadaccount.app.mapper.UserDao;
-import com.workloadaccount.app.mapper.UserProjectDao;
-import com.workloadaccount.app.mapper.WorkloadDao;
+import com.workloadaccount.app.mapper.WorkloadRecordDao;
 import com.workloadaccount.app.service.ProjectService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.workloadaccount.app.transfer.ProjectTransfer;
+import com.workloadaccount.app.vo.ProjectVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author
@@ -20,24 +21,21 @@ import java.util.List;
  * @since
  */
 @Service
+@Slf4j
 public class ProjectServiceImpl implements ProjectService {
-    Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
     private final ProjectDao projectDao;
 
-    private final UserProjectDao userProjectDao;
 
     private final UserDao userDao;
 
-    private final WorkloadDao workloadDao;
+    private final WorkloadRecordDao workloadDao;
 
     @Autowired(required = false)
     public ProjectServiceImpl(final ProjectDao projectDao,
-                              final UserProjectDao userProjectDao,
                               final UserDao userDao,
-                              final WorkloadDao workloadDao) {
+                              final WorkloadRecordDao workloadDao) {
         this.projectDao = projectDao;
-        this.userProjectDao = userProjectDao;
         this.userDao = userDao;
         this.workloadDao = workloadDao;
     }
@@ -167,4 +165,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
 
+    @Override
+    public List<ProjectVO> listProject() {
+        log.info(projectDao.listProjects().toString());
+        return projectDao.listProjects().stream()
+                .map(ProjectTransfer.INSTANCE::mapToVO)
+                .collect(Collectors.toList());
+    }
 }

@@ -1,5 +1,9 @@
 package com.workloadaccount.app.service;
 
+import com.workloadaccount.app.dto.RecordWorkTimeDTO;
+
+import java.util.List;
+
 /**
  * @author
  * @description
@@ -7,5 +11,5 @@ package com.workloadaccount.app.service;
  * @since
  */
 public interface UserWorkloadService {
-    void insertWorkload();
+    void insertWorkload(List<RecordWorkTimeDTO> recordWorkTimeDTOList);
 }

@@ -5,24 +5,16 @@
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
-        <result column="project_major" jdbcType="VARCHAR" property="projectMajor"/>
-        <result column="project_creator" jdbcType="VARCHAR" property="projectCreator"/>
-        <result column="project_manager" jdbcType="VARCHAR" property="projectManager"/>
-        <result column="group" jdbcType="VARCHAR" property="group"/>
-        <result column="project_status" jdbcType="TINYINT" property="projectStatus"/>
-        <result column="start_datetime" jdbcType="TIMESTAMP" property="startDatetime"/>
-        <result column="end_datetime" jdbcType="TIMESTAMP" property="endDatetime"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, `name`, description, project_major, project_creator, project_manager, `group`, project_status,
-        start_datetime, start_datetime, end_datetime, create_time, update_time
+        id, `name`, description, create_time, update_time
     </sql>
 
 <!--    List<ProjectDO> listProjects();-->
-    <select id="listProjects" resultMap="BaseResultMap">
+    <select id="listProjects" resultType="com.workloadaccount.app.entity.ProjectDO">
         select
         <include refid="Base_Column_List"/>
         from tb_project

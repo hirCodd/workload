@@ -2,9 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.workloadaccount.app.mapper.WorkloadRecordDao">
 
-    <parameterMap id="" type="com.workloadaccount.app.entity.WorkloadRecordDO">
+    <resultMap id="BaseResultMap" type="com.workloadaccount.app.entity.WorkloadRecordDO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="project_id" jdbcType="INTEGER" property="projectId"/>
+        <result column="workload_date" jdbcType="DATE" property="workloadDate"/>
+        <result column="workload_time" jdbcType="DECIMAL" property="workloadTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
 
-    </parameterMap>
+    <resultMap id="UserAndProjectIdResultMap" type="com.workloadaccount.app.entity.WorkloadRecordDO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="project_id" jdbcType="INTEGER" property="projectId"/>
+        <result column="workload_date" jdbcType="DATE" property="workloadDate"/>
+        <result column="workload_time" jdbcType="DECIMAL" property="workloadTime"/>
+    </resultMap>
+
 <!--    void insertWorkload(WorkloadLogDO workloadLogDO);-->
     <insert id="insertWorkload" parameterType="com.workloadaccount.app.entity.WorkloadRecordDO">
         insert into tb_workload_record(user_id, project_id, workload_date, workload_time, create_time, update_time)
@@ -14,4 +29,19 @@
             #{item.workloadTime, jdbcType=DECIMAL}, now(), now())
         </foreach>
     </insert>
+
+<!--    List<Integer> listUserByProjectId(Integer projectId);-->
+    <select id="listUserByProjectId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select DISTINCT(user_id)
+        from tb_workload_record
+        where project_id = #{projectId, jdbcType=INTEGER}
+    </select>
+
+<!--    List<WorkloadRecordDO> findByUserAndProjectId(Integer userId, Integer projectId);-->
+    <select id="findByUserAndProjectId" resultMap="UserAndProjectIdResultMap" parameterType="java.lang.Integer">
+        SELECT user_id, project_id, DATE_FORMAT(workload_date, '%Y-%m') as workload_date, SUM(workload_time) as workload_time
+        FROM tb_workload_record
+        WHERE project_id = #{projectId, jdbcType=INTEGER} and user_id = #{userId, jdbcType=INTEGER}
+        GROUP BY DATE_FORMAT(workload_date, '%Y-%m')
+    </select>
 </mapper>

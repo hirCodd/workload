@@ -31,6 +31,6 @@ public class AdminWorkloadController {
     @GetMapping("/count/project")
     public Result countByProject() {
         adminWorkloadService.getWorkloadByProject();
-        return ResultUtil.success(GLOBAL_SUCCESS.getCode(), GLOBAL_SUCCESS.getMessage());
+        return ResultUtil.success(GLOBAL_SUCCESS.getCode(), GLOBAL_SUCCESS.getMessage(), adminWorkloadService.getWorkloadByProject());
     }
 }

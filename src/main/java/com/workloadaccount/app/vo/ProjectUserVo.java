@@ -1,5 +1,6 @@
 package com.workloadaccount.app.vo;
 
+import com.workloadaccount.app.entity.WorkloadRecordDO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectWorkloadVO {
-    private Integer projectId;
-    private String projectName;
-    private List<ProjectUserVo> projectUser;
+public class ProjectUserVo {
+    private String username;
+//    private Integer total;
+    /**
+     * 用户每月的工作时间
+     */
+    private List<WorkloadRecordDO> userWorkload;
 }

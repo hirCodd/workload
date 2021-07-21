@@ -19,4 +19,19 @@ public interface WorkloadRecordDao {
      * @param workloadLogDO
      */
     void insertWorkload(List<WorkloadRecordDO> workloadLogDO);
+
+
+    /**
+     * 查询项目下的所有用户
+     * @param projectId
+     * @return
+     */
+    List<Integer> listUserByProjectId(Integer projectId);
+
+    /**
+     * 根据id查询工作时长
+     * @param projectId
+     * @return
+     */
+    List<WorkloadRecordDO> findByUserAndProjectId(Integer userId, Integer projectId);
 }

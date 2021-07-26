@@ -21,7 +21,7 @@ import java.sql.Timestamp;
 public class WorkloadRecordDO extends BaseDO {
     private static final long serialVersionUID = 5914342016508695142L;
 
-    private Integer userId;
+    private String userid;
     private Integer projectId;
 
     /**
@@ -33,6 +33,4 @@ public class WorkloadRecordDO extends BaseDO {
      * 工作时间(秒)
      */
     private BigDecimal workloadTime;
-
-
 }

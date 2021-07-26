@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
+import java.sql.Timestamp;
+
 /**
  * @author
  * @description
@@ -14,29 +17,52 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class UserDO extends BaseDO{
+public class UserDO implements Serializable {
     private static final long serialVersionUID = -8765178865080756261L;
+
+    private String userid;
+
+    /**
+     * 部门
+     */
+    private String dept;
+
+    /**
+     * 真实用户名
+     */
+    private String realName;
+
+    private Integer seqNo;
 
     /**
      * 用户名
      */
-    private String name;
+    private String username;
 
     /**
-     * 登录用户名
+     * 密码
      */
-    private String loginName;
-
     private String password;
 
     /**
-     * 用户角色
+     * 角色
      */
-    private Integer userRole;
+    private Integer roleCode;
+
+    private char flag;
+
+    private Timestamp createTime;
+
+    private String ip;
 
     /**
-     * 用户工作角色
+     * 停止时间
      */
-    private Integer userWorkRole;
+    private Timestamp quitTime;
+
+    /**
+     * 工作代码
+     */
+    private String workCode;
+
 }

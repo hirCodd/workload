@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 /**
  * @author
  * @description
@@ -15,9 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectWorkloadVO {
-    private Integer projectId;
-    private String projectName;
-    private List<ProjectMonthWorkloadVO> projectMonth;
-    private List<ProjectUserVO> projectUser;
+public class ProjectMonthWorkloadVO {
+    private String workDate;
+    private Integer workloadTime;
 }

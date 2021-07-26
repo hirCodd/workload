@@ -15,9 +15,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectWorkloadVO {
-    private Integer projectId;
-    private String projectName;
-    private List<ProjectMonthWorkloadVO> projectMonth;
-    private List<ProjectUserVO> projectUser;
+public class UserWorkloadVO {
+    private String userid;
+    private String username;
+    private String realName;
+    private List<UserWorkloadMonthVO> userMonthWorkload;
 }

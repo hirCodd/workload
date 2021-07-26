@@ -24,5 +24,5 @@ public interface UserDao {
      * @param id id
      * @return
      */
-    UserDO findUserById(Integer id);
+    UserDO findUserById(String id);
 }

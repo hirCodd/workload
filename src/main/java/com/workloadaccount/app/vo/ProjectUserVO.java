@@ -16,9 +16,9 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProjectUserVo {
+public class ProjectUserVO {
     private String username;
-//    private Integer total;
+    private String realName;
     /**
      * 用户每月的工作时间
      */

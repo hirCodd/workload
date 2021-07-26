@@ -4,7 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.workloadaccount.app.entity.WorkloadRecordDO">
         <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="userid" jdbcType="VARCHAR" property="userid"/>
         <result column="project_id" jdbcType="INTEGER" property="projectId"/>
         <result column="workload_date" jdbcType="DATE" property="workloadDate"/>
         <result column="workload_time" jdbcType="DECIMAL" property="workloadTime"/>
@@ -14,34 +14,73 @@
 
     <resultMap id="UserAndProjectIdResultMap" type="com.workloadaccount.app.entity.WorkloadRecordDO">
         <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="userid" jdbcType="VARCHAR" property="userid"/>
         <result column="project_id" jdbcType="INTEGER" property="projectId"/>
         <result column="workload_date" jdbcType="DATE" property="workloadDate"/>
         <result column="workload_time" jdbcType="DECIMAL" property="workloadTime"/>
     </resultMap>
+    
+    <parameterMap id="UserIdAndDateParameterMap" type="com.workloadaccount.app.entity.WorkloadRecordDO">
+        <parameter property="userId" jdbcType="VARCHAR" javaType="java.lang.Integer" resultMap="BaseResultMap"/>
+        <parameter property="workloadDate" jdbcType="DATE" javaType="java.sql.Date" resultMap="BaseResultMap"/>
+    </parameterMap>
+
+    <parameterMap id="listWorkloadByUserAndProjectIdParamMap" type="com.workloadaccount.app.entity.WorkloadRecordDO">
+        <parameter property="projectId" jdbcType="INTEGER" javaType="java.lang.Integer" resultMap="BaseResultMap"/>
+        <parameter property="userId" jdbcType="VARCHAR" javaType="java.lang.String" resultMap="BaseResultMap"/>
+        <parameter property="year" jdbcType="VARCHAR" javaType="java.lang.String" resultMap="BaseResultMap"/>
+    </parameterMap>
+
+    <parameterMap id="listUserByProjectIdParamsMap" type="com.workloadaccount.app.entity.WorkloadRecordDO">
+        <parameter property="projectId" jdbcType="INTEGER" javaType="java.lang.Integer" resultMap="BaseResultMap"/>
+        <parameter property="year" jdbcType="VARCHAR" javaType="java.lang.String" resultMap="BaseResultMap"/>
+    </parameterMap>
 
 <!--    void insertWorkload(WorkloadLogDO workloadLogDO);-->
     <insert id="insertWorkload" parameterType="com.workloadaccount.app.entity.WorkloadRecordDO">
-        insert into tb_workload_record(user_id, project_id, workload_date, workload_time, create_time, update_time)
+        insert into tb_workload_record(userid, project_id, workload_date, workload_time, create_time, update_time)
         values
         <foreach collection="list" item="item" index="index" separator="," >
-            (#{item.userId, jdbcType=INTEGER}, #{item.projectId, jdbcType=INTEGER}, #{item.workloadDate, jdbcType=DATE},
+            (#{item.userId, jdbcType=VARCHAR}, #{item.projectId, jdbcType=INTEGER}, #{item.workloadDate, jdbcType=DATE},
             #{item.workloadTime, jdbcType=DECIMAL}, now(), now())
         </foreach>
     </insert>
 
 <!--    List<Integer> listUserByProjectId(Integer projectId);-->
-    <select id="listUserByProjectId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        select DISTINCT(user_id)
+    <select id="listUserByProjectId" parameterMap="listUserByProjectIdParamsMap" resultType="java.lang.String">
+        select DISTINCT(userid)
         from tb_workload_record
-        where project_id = #{projectId, jdbcType=INTEGER}
+        where project_id = #{projectId, jdbcType=INTEGER} and DATE_FORMAT(workload_date, '%Y') = #{year, jdbcType=VARCHAR}
     </select>
 
-<!--    List<WorkloadRecordDO> findByUserAndProjectId(Integer userId, Integer projectId);-->
-    <select id="findByUserAndProjectId" resultMap="UserAndProjectIdResultMap" parameterType="java.lang.Integer">
-        SELECT user_id, project_id, DATE_FORMAT(workload_date, '%Y-%m') as workload_date, SUM(workload_time) as workload_time
+<!--    listWorkloadByUserAndProjectId-->
+    <select id="listWorkloadByUserAndProjectId" resultMap="UserAndProjectIdResultMap" parameterMap="listWorkloadByUserAndProjectIdParamMap">
+        SELECT userid, project_id, DATE_FORMAT(workload_date, '%Y-%m') as workload_date, SUM(workload_time) as workload_time
         FROM tb_workload_record
-        WHERE project_id = #{projectId, jdbcType=INTEGER} and user_id = #{userId, jdbcType=INTEGER}
+        WHERE project_id = #{projectId, jdbcType=INTEGER} and userid = #{userId, jdbcType=VARCHAR}
+        and DATE_FORMAT(workload_date, '%Y') = #{year, jdbcType=VARCHAR}
         GROUP BY DATE_FORMAT(workload_date, '%Y-%m')
+    </select>
+
+<!--    List<Integer> listUserByWorkload(String workloadDate);-->
+    <select id="listUserByWorkload" parameterType="java.lang.String" resultType="java.lang.String">
+        select DISTINCT(userid)
+        from tb_workload_record
+        where DATE_FORMAT(workload_date,'%Y-%m') = #{workloadDate, jdbcType=DATE}
+    </select>
+
+    <select id="listProjectByWorkload" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT DISTINCT(project_id)
+        FROM tb_workload_record
+        WHERE DATE_FORMAT(workload_date, '%Y') = #{workloadDate, jdbcType=DATE}
+    </select>
+
+<!--    List<WorkloadRecordDO> listWorkloadByUserIdAndDate(Integer userId, Date workloadDate);-->
+    <select id="listWorkloadByUserIdAndDate" resultMap="UserAndProjectIdResultMap" parameterMap="UserIdAndDateParameterMap">
+        SELECT userid, project_id, DATE_FORMAT(workload_date, '%Y-%m-%d') as workload_date, SUM(workload_time) as workload_time
+        FROM tb_workload_record
+        WHERE userid = #{userId, jdbcType=VARCHAR} AND DATE_FORMAT(workload_date,'%Y-%m') = #{workloadDate, jdbcType=DATE}
+        GROUP BY DATE_FORMAT(workload_date, '%Y-%m-%d')
+        ORDER BY DATE_FORMAT(workload_date, '%Y-%m-%d')
     </select>
 </mapper>

@@ -29,7 +29,7 @@ public class UserWorkloadServiceImpl implements UserWorkloadService {
         List<WorkloadRecordDO> workloadRecordDOList = new ArrayList<>();
         recordWorkTimeDTOList.forEach(recordWorkTimeDTO -> {
             WorkloadRecordDO workloadRecordDO = new WorkloadRecordDO();
-            workloadRecordDO.setUserId(1);
+            workloadRecordDO.setUserid(recordWorkTimeDTO.getUserid());
             workloadRecordDO.setProjectId(Integer.parseInt(recordWorkTimeDTO.getProjectId()));
             workloadRecordDO.setWorkloadDate(recordWorkTimeDTO.getDate());
             workloadRecordDO.setWorkloadTime(recordWorkTimeDTO.getWorkTime());

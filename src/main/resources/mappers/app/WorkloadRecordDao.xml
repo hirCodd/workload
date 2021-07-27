@@ -12,7 +12,7 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
-    <resultMap id="UserAndProjectIdResultMap" type="com.workloadaccount.app.entity.WorkloadRecordDO">
+    <resultMap id="WorkloadBaseResultMap" type="com.workloadaccount.app.entity.WorkloadRecordDO">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="userid" jdbcType="VARCHAR" property="userid"/>
         <result column="project_id" jdbcType="INTEGER" property="projectId"/>
@@ -21,7 +21,7 @@
     </resultMap>
     
     <parameterMap id="UserIdAndDateParameterMap" type="com.workloadaccount.app.entity.WorkloadRecordDO">
-        <parameter property="userId" jdbcType="VARCHAR" javaType="java.lang.Integer" resultMap="BaseResultMap"/>
+        <parameter property="userId" jdbcType="VARCHAR" javaType="java.lang.String" resultMap="BaseResultMap"/>
         <parameter property="workloadDate" jdbcType="DATE" javaType="java.sql.Date" resultMap="BaseResultMap"/>
     </parameterMap>
 
@@ -36,15 +36,29 @@
         <parameter property="year" jdbcType="VARCHAR" javaType="java.lang.String" resultMap="BaseResultMap"/>
     </parameterMap>
 
+    <parameterMap id="listEarlyDataParamsMap" type="com.workloadaccount.app.entity.WorkloadRecordDO">
+        <parameter property="userid" jdbcType="VARCHAR" javaType="java.lang.String" resultMap="BaseResultMap"/>
+        <parameter property="startDate" jdbcType="DATE" javaType="java.lang.String" resultMap="BaseResultMap"/>
+        <parameter property="endDate" jdbcType="DATE" javaType="java.lang.String" resultMap="BaseResultMap"/>
+    </parameterMap>
+
 <!--    void insertWorkload(WorkloadLogDO workloadLogDO);-->
     <insert id="insertWorkload" parameterType="com.workloadaccount.app.entity.WorkloadRecordDO">
         insert into tb_workload_record(userid, project_id, workload_date, workload_time, create_time, update_time)
         values
         <foreach collection="list" item="item" index="index" separator="," >
-            (#{item.userId, jdbcType=VARCHAR}, #{item.projectId, jdbcType=INTEGER}, #{item.workloadDate, jdbcType=DATE},
+            (#{item.userid, jdbcType=VARCHAR}, #{item.projectId, jdbcType=INTEGER}, #{item.workloadDate, jdbcType=DATE},
             #{item.workloadTime, jdbcType=DECIMAL}, now(), now())
         </foreach>
     </insert>
+
+<!--    List<WorkloadRecordDO> listEarlyData(String startDate, String endDate, String userid);-->
+    <select id="listEarlyData" resultMap="WorkloadBaseResultMap" parameterMap="listEarlyDataParamsMap">
+        SELECT id, userid, project_id, workload_date, workload_time
+        FROM tb_workload_record
+        WHERE userid = #{userid, jdbcType=VARCHAR}
+        AND workload_date BETWEEN #{startDate, jdbcType=DATE} AND #{endDate, jdbcType=DATE}
+    </select>
 
 <!--    List<Integer> listUserByProjectId(Integer projectId);-->
     <select id="listUserByProjectId" parameterMap="listUserByProjectIdParamsMap" resultType="java.lang.String">
@@ -54,7 +68,7 @@
     </select>
 
 <!--    listWorkloadByUserAndProjectId-->
-    <select id="listWorkloadByUserAndProjectId" resultMap="UserAndProjectIdResultMap" parameterMap="listWorkloadByUserAndProjectIdParamMap">
+    <select id="listWorkloadByUserAndProjectId" resultMap="WorkloadBaseResultMap" parameterMap="listWorkloadByUserAndProjectIdParamMap">
         SELECT userid, project_id, DATE_FORMAT(workload_date, '%Y-%m') as workload_date, SUM(workload_time) as workload_time
         FROM tb_workload_record
         WHERE project_id = #{projectId, jdbcType=INTEGER} and userid = #{userId, jdbcType=VARCHAR}
@@ -76,7 +90,7 @@
     </select>
 
 <!--    List<WorkloadRecordDO> listWorkloadByUserIdAndDate(Integer userId, Date workloadDate);-->
-    <select id="listWorkloadByUserIdAndDate" resultMap="UserAndProjectIdResultMap" parameterMap="UserIdAndDateParameterMap">
+    <select id="listWorkloadByUserIdAndDate" resultMap="WorkloadBaseResultMap" parameterMap="UserIdAndDateParameterMap">
         SELECT userid, project_id, DATE_FORMAT(workload_date, '%Y-%m-%d') as workload_date, SUM(workload_time) as workload_time
         FROM tb_workload_record
         WHERE userid = #{userId, jdbcType=VARCHAR} AND DATE_FORMAT(workload_date,'%Y-%m') = #{workloadDate, jdbcType=DATE}

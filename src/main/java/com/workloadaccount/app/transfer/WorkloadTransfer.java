@@ -1,6 +1,7 @@
 package com.workloadaccount.app.transfer;
 
 import com.workloadaccount.app.entity.WorkloadRecordDO;
+import com.workloadaccount.app.vo.UserRecordWorkloadVO;
 import com.workloadaccount.app.vo.UserWorkloadMonthVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -21,4 +22,11 @@ public interface WorkloadTransfer {
      * @return
      */
     UserWorkloadMonthVO mapToUserWorkloadVO(WorkloadRecordDO workloadRecordDO);
+
+    /**
+     * 讲实体转为视图
+     * @param workloadRecordDO
+     * @return
+     */
+    UserRecordWorkloadVO mapToUserRecordVO(WorkloadRecordDO workloadRecordDO);
 }

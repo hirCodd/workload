@@ -26,10 +26,6 @@ public enum ResultEnum {
     ;
 
 
-
-
-
-
     private final int code;
     private final String message;
 

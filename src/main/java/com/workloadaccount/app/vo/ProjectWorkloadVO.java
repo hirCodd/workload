@@ -18,6 +18,6 @@ import java.util.List;
 public class ProjectWorkloadVO {
     private Integer projectId;
     private String projectName;
-    private List<ProjectMonthWorkloadVO> projectMonth;
+//    private List<ProjectMonthWorkloadVO> projectMonth;
     private List<ProjectUserVO> projectUser;
 }
